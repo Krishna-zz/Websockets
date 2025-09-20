@@ -1,36 +1,49 @@
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebSocket Demo</title>
 </head>
 <body>
-  <h2>WebSocket Client</h2>
-  <button onclick="sendMessage()">Send Message</button>
-  <div id="messages"></div>
+      <h1>WebSocket Demo</h1>
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+      <pre id="log"></pre>
 
-  <script>
-    const ws = new WebSocket('ws://localhost:8080');
-    const messagesDiv = document.getElementById('messages');
+      <script>
+        //Connect to our local WebSocket Server
 
-    ws.onopen = () => {
-      console.log('✅ Connected to server');
-      addMessage("Connected to server");
-    };
+        const socket = new WebSocket('ws://localhost:8080')
 
-    ws.onmessage = (event) => {
-      console.log('📩 From server:', event.data);
-      addMessage(event.data);
-    };
+        const log = document.getElementById('log')
 
-    function sendMessage() {
-      ws.send("Hello from Client!");
-    }
+        function logMessage(msg){
+          log.textContent += msg + "\n";
+        }
 
-    function addMessage(msg) {
-      const p = document.createElement("p");
-      p.textContent = msg;
-      messagesDiv.appendChild(p);
-    }
-  </script>
+        socket.onopen = () => {
+          logMessage("✅ Connected to Server!")
+        }
+
+        socket.onmessage = (event) => {
+          logMessage("📩 From server:" + event.data)
+        }
+
+        socket.onclose = () => {
+          logMessage("❌ Connection Closed")
+        }
+
+
+        const sendMessage = () => {
+          const input = document.getElementById('messageInput')
+          socket.send(input.value)
+          logMessage("➡️ Sent: " + input.value)
+          input.value = ''
+        }
+
+      </script>
 </body>
 </html>
