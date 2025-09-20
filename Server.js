@@ -1,6 +1,6 @@
 import {WebSocketServer} from 'ws'
 
-
+//created a websocketserver on port 8080
 const wss = new WebSocketServer({port:8080})
 
 console.log('✅ WebSocket server running on ws://localhost:8080');
@@ -8,7 +8,7 @@ console.log('✅ WebSocket server running on ws://localhost:8080');
 //When connected to the Client
 wss.on('connection', (ws) => {
 
-    console.log('🔗 Client Connected!');  //Confirmation message
+    console.log('🔗 Client Connected!');  //Confirmation message  
     
     ws.send('Hello from Server!')  //Send message to the client
 
